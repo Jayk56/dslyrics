@@ -1,0 +1,37 @@
+[package]
+name = "lyrics-dsl"
+version = "0.1.0"
+edition = "2025"
+
+[dependencies]
+# Parser (choose one approach)
+pest = "2.7"
+pest_derive = "2.7"
+
+# AST and traversal
+rowan = "0.15"
+smol_str = "0.2"  # Efficient small strings
+
+# Error handling
+miette = { version = "5.10", features = ["fancy"] }
+thiserror = "1.0"
+
+# Validation
+regex = "1.10"
+once_cell = "1.19"
+lazy_static = "1.4"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# CLI
+clap = { version = "4.4", features = ["derive"] }
+colored = "2.1"
+
+# Testing
+insta = "1.34"  # Snapshot testing for parsers
+
+[dev-dependencies]
+criterion = "0.5"  # Benchmarking
+proptest = "1.4"  # Property testing
