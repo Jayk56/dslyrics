@@ -88,7 +88,7 @@ fn test_pest_integration(verbose: bool) -> Result<(), Box<dyn std::error::Error>
     }
 
     // Parse a small DSL snippet using the pest grammar
-    let sample = "title:\"Test\"\nartist:\"Author\"\nVERSE[1]\nLine one\nLine two\nCHORUS\nLa la la\n";
+    let sample = "title:\"Test\"\nartist:\"Author\"\nVERSE[1]\nLine one\nCHORUS\nLa la la\n";
     parser::parse_lyrics(sample)?;
 
     if verbose {
@@ -134,8 +134,8 @@ fn test_regex_integration(verbose: bool) -> Result<(), Box<dyn std::error::Error
     
     use regex::Regex;
     
-    let verse_pattern = Regex::new(r"^\[Verse \d+\]")?;
-    let test_line = "[Verse 1]";
+    let verse_pattern = Regex::new(r"^VERSE\[\d+\]")?;
+    let test_line = "VERSE[1]";
     
     if verse_pattern.is_match(test_line) {
         if verbose {
@@ -219,9 +219,9 @@ fn process_interactive_input(input: &str, verbose: bool) -> Result<(), Box<dyn s
     // Basic pattern matching for different types of input
     use regex::Regex;
     
-    let verse_regex = Regex::new(r"^\[Verse \d+\]")?;
-    let chorus_regex = Regex::new(r"^\[Chorus\]")?;
-    let bridge_regex = Regex::new(r"^\[Bridge\]")?;
+    let verse_regex = Regex::new(r"^VERSE\[\d+\]")?;
+    let chorus_regex = Regex::new(r"^CHORUS$")?;
+    let bridge_regex = Regex::new(r"^BRIDGE$")?;
     
     if verse_regex.is_match(input) {
         println!("{}", "🎼 Detected verse marker".blue());
@@ -254,10 +254,10 @@ mod tests {
     fn test_regex_patterns() {
         use regex::Regex;
         
-        let verse_pattern = Regex::new(r"^\[Verse \d+\]").unwrap();
-        assert!(verse_pattern.is_match("[Verse 1]"));
-        assert!(verse_pattern.is_match("[Verse 2]"));
-        assert!(!verse_pattern.is_match("[Chorus]"));
+        let verse_pattern = Regex::new(r"^VERSE\[\d+\]").unwrap();
+        assert!(verse_pattern.is_match("VERSE[1]"));
+        assert!(verse_pattern.is_match("VERSE[2]"));
+        assert!(!verse_pattern.is_match("CHORUS"));
     }
     
     #[test]

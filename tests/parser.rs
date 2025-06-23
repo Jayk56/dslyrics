@@ -13,3 +13,9 @@ fn parse_failure() {
     assert!(parse_lyrics(bad_input).is_err());
 }
 
+#[test]
+fn parse_glitch_song() {
+    let song = std::fs::read_to_string("tests/glitch_song.txt").expect("read song");
+    assert!(parse_lyrics(&song).is_ok());
+}
+
