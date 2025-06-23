@@ -2,6 +2,8 @@ use clap::{Arg, Command};
 use colored::*;
 use std::io::{self, Write};
 
+mod parser;
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Initialize CLI with clap
     let matches = Command::new("lyrics-dsl")
@@ -84,11 +86,11 @@ fn test_pest_integration(verbose: bool) -> Result<(), Box<dyn std::error::Error>
     if verbose {
         println!("  - Testing pest parser integration...");
     }
-    
-    // Basic test to ensure pest is working
-    // Note: This would normally use a grammar file, but for now we'll just confirm the dependency loads
-    // The pest::Parser trait would be used when implementing actual parsing logic with a grammar
-    
+
+    // Parse a small DSL snippet using the pest grammar
+    let sample = "title:\"Test\"\nartist:\"Author\"\nVERSE[1]\nLine one\nLine two\nCHORUS\nLa la la\n";
+    parser::parse_lyrics(sample)?;
+
     if verbose {
         println!("    ✓ Pest parser ready");
     }
