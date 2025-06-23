@@ -367,6 +367,12 @@ Key modules:
 - CLI: `src/cli/`
 - VS Code Extension: `extensions/vscode/`
 
+## Simplified Rust Grammar
+
+A minimal Rust implementation using the [pest](https://pest.rs) parser can be
+found in `src/lyrics.pest`. It covers basic metadata, verses and choruses and is
+exercised by tests under `tests/parser.rs`.
+
 ---
 
 ## License

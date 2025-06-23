@@ -37,5 +37,7 @@ colored = "2.1"
 insta = "1.34"  # Snapshot testing for parsers
 
 [dev-dependencies]
-criterion = "0.5"  # Benchmarking
-proptest = "1.4"  # Property testing
+# Benchmarking and property testing libraries are commented out to allow
+# running tests in environments without network access.
+# criterion = "0.5"
+# proptest = "1.4"
