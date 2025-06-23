@@ -87,7 +87,7 @@ fn test_pest_integration(verbose: bool) -> Result<(), Box<dyn std::error::Error>
     
     // Basic test to ensure pest is working
     // Note: This would normally use a grammar file, but for now we'll just confirm the dependency loads
-    use pest::Parser;
+    // The pest::Parser trait would be used when implementing actual parsing logic with a grammar
     
     if verbose {
         println!("    ✓ Pest parser ready");
@@ -182,7 +182,7 @@ fn process_lyrics_file(
 
 fn interactive_mode(verbose: bool) -> Result<(), Box<dyn std::error::Error>> {
     println!("{}", "🎤 Interactive Lyrics DSL Mode".magenta().bold());
-    println!("{}", "Type lyrics or DSL commands (type 'quit' to exit):".dim());
+    println!("{}", "Type lyrics or DSL commands (type 'quit' to exit):".dimmed());
     
     loop {
         print!("{}", "lyrics> ".bright_blue());
@@ -230,7 +230,7 @@ fn process_interactive_input(input: &str, verbose: bool) -> Result<(), Box<dyn s
     } else if input.starts_with('[') && input.ends_with(']') {
         println!("{}", "🏷️  Detected custom section marker".yellow());
     } else {
-        println!("{}", "📝 Processed lyric line".dim());
+        println!("{}", "📝 Processed lyric line".dimmed());
     }
     
     // Echo the processed result
