@@ -3,6 +3,10 @@ name = "lyrics-dsl"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "lyrics-dsl"
+path = "src/main.rs"
+
 [dependencies]
 # Parser (choose one approach)
 pest = "2.7"
