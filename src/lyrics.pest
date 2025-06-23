@@ -1,11 +1,46 @@
-song = { SOI ~ metadata ~ section+ ~ EOI }
-metadata = { (meta_key ~ ":" ~ value ~ NEWLINE)+ }
-meta_key = { "title" | "artist" }
-value = _{ quoted_string | ASCII_ALPHANUMERIC+ }
-section = _{ verse | chorus }
-verse = { "VERSE" ~ section_number? ~ NEWLINE ~ line+ }
-chorus = { "CHORUS" ~ section_number? ~ NEWLINE ~ line+ }
-section_number = { "[" ~ ASCII_DIGIT+ ~ "]" }
-line = { (!NEWLINE ~ ANY)+ ~ NEWLINE }
-quoted_string = _{ "\"" ~ (!"\"" ~ ANY)* ~ "\"" }
-NEWLINE = _{ "\n" }
+// Full Lyrics DSL grammar as defined in README.md
+
+song            = { SOI ~ metadata ~ sections ~ EOI }
+
+metadata        = { meta_entry+ }
+meta_entry      = { meta_key ~ ":" ~ meta_value ~ NEWLINE }
+meta_key        = { "title" | "artist" | "tempo" | "key" | "time_sig" | "genre" | "lang" | "writers" | "duration" }
+meta_value      = { quoted_string | number | identifier }
+
+sections        = { section+ }
+section         = { verse | chorus | bridge | pre_chorus | outro | intro }
+
+verse           = { "VERSE" ~ section_number? ~ section_attrs? ~ NEWLINE ~ lines }
+chorus          = { "CHORUS" ~ section_number? ~ section_attrs? ~ NEWLINE ~ lines }
+bridge          = { "BRIDGE" ~ section_attrs? ~ NEWLINE ~ lines }
+pre_chorus      = { "PRE-CHORUS" ~ section_attrs? ~ NEWLINE ~ lines }
+outro           = { "OUTRO" ~ section_attrs? ~ NEWLINE ~ lines }
+intro           = { "INTRO" ~ section_attrs? ~ NEWLINE ~ lines }
+
+section_number  = { "[" ~ number ~ "]" }
+section_attrs   = { "{" ~ attr_list ~ "}" }
+attr_list       = { attribute ~ ("," ~ attribute)* }
+attribute       = { attr_name ~ ":" ~ attr_value }
+attr_name       = { identifier }
+attr_value      = { quoted_string | number | boolean }
+
+lines           = { line+ }
+line            = { line_content ~ line_attrs? ~ NEWLINE }
+line_content    = { (!NEWLINE ~ !"{" ~ ANY)+ }
+line_attrs      = { "{" ~ line_attr_list ~ "}" }
+line_attr_list  = { line_attribute ~ ("," ~ line_attribute)* }
+line_attribute  = { ("rhyme" ~ ":" ~ rhyme_scheme)
+                  | ("stress" ~ ":" ~ stress_pattern)
+                  | ("chord" ~ ":" ~ chord_sequence)
+                  | ("timing" ~ ":" ~ timing_info) }
+
+quoted_string   = _{ "\"" ~ (!"\"" ~ ANY)* ~ "\"" }
+number          = { ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+)? }
+identifier      = { (ASCII_ALPHA | "_") ~ (ASCII_ALPHANUMERIC | "_")* }
+boolean         = { "true" | "false" }
+rhyme_scheme    = { ASCII_ALPHA_UPPER }
+stress_pattern  = { ("x" | "/")+ }
+chord_sequence  = { chord ~ ("," ~ chord)* }
+chord           = { ASCII_ALPHA_UPPER ~ ("#" | "b")? ~ ("maj" | "min" | "dim" | "aug" | ASCII_DIGIT+)? }
+timing_info     = { number ~ ":" ~ number }
+NEWLINE         = _{ "\n" }
